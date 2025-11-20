@@ -31,12 +31,20 @@
             font-size: 16px;
         }
 
-        /* --- STATUS BADGE (TOP LEFT) --- */
+        /* --- STATUS BADGE (UPDATED: FRAMED) --- */
         .status-badge {
             position: fixed;
             top: 30px;
             left: 30px;
             z-index: 500;
+            /* Frame & Fill Logic */
+            background: rgba(10, 10, 10, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 15px 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            
+            /* Typography */
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text-dim);
@@ -45,12 +53,14 @@
             pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .status-blink {
             color: var(--accent-red);
             animation: blink-status 2s infinite;
+            font-weight: 700;
         }
 
         @keyframes blink-status {
@@ -190,7 +200,7 @@
             padding-left: 40px;
         }
 
-        /* --- SECTION: THE ARCHITECT --- */
+        /* --- SECTION: THE ARCHITECT (UPDATED) --- */
         .architect-section {
             min-height: 100vh;
             display: flex;
@@ -222,14 +232,10 @@
             height: 100%;
             object-fit: contain;
             object-position: bottom center;
-            filter: grayscale(100%) contrast(1.2) brightness(0.9);
+            
+            /* REMOVED FILTERS & MASK AS REQUESTED */
+            /* Colors are now raw (colored), No blur at bottom */
             transition: 1s;
-            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-        }
-
-        .arch-visual:hover .arch-img {
-            filter: grayscale(0%) contrast(1.1) brightness(1);
         }
 
         .arch-content {
@@ -332,7 +338,7 @@
 </head>
 <body>
 
-    <!-- STATUS BADGE -->
+    <!-- STATUS BADGE (FRAMED) -->
     <div class="status-badge">
         <span>STATUS: <span class="status-blink">EXPERIMENTAL</span></span>
         <span style="opacity: 0.5"></span>
@@ -452,11 +458,12 @@
             </div>
         </section>
 
-        <!-- THE ARCHITECT -->
+        <!-- THE ARCHITECT (UPDATED) -->
         <section class="architect-section">
             <div class="arch-grid">
                 <div class="arch-visual">
                     <img src="art.png" alt="The Architect" class="arch-img">
+                    <!-- Optional Glow behind the sign -->
                     <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); filter: blur(50px); z-index: -1;"></div>
                 </div>
                 <div class="arch-content">
