@@ -31,23 +31,21 @@
             font-size: 16px;
         }
 
-        /* --- STATUS BADGE (iOS 26 CENTERED PILL) --- */
+        /* --- STATUS BADGE (CENTERED IOS PILL) --- */
         .status-badge {
             position: fixed;
-            top: 20px; /* Чуть выше для эстетики */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 500;
             
-            /* Glassmorphism Pill Style */
-            background: rgba(15, 15, 15, 0.6); /* Более прозрачный для iOS эффекта */
+            background: rgba(15, 15, 15, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 100px; /* Полное скругление */
+            border-radius: 100px;
             padding: 12px 24px;
-            backdrop-filter: blur(20px); /* Сильный блюр */
+            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             
-            /* Typography */
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text-dim);
@@ -55,12 +53,11 @@
             letter-spacing: 0.1em;
             pointer-events: none;
             
-            /* Layout */
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            white-space: nowrap; /* В одну строку */
+            white-space: nowrap;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
@@ -81,7 +78,6 @@
             background: black;
         }
         
-        /* The breathing blue light */
         .nebula {
             position: absolute;
             top: 50%; left: 50%;
@@ -146,13 +142,12 @@
             position: relative;
         }
 
-        /* Fullscreen sections for emphasis */
         .screen-section {
             min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start; /* Left align for reading flow */
+            align-items: flex-start;
             padding: 100px 0;
         }
 
@@ -182,7 +177,7 @@
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: 0; /* SHARP */
+            border-radius: 0; 
             transition: all 0.4s ease;
         }
 
@@ -207,13 +202,15 @@
             padding-left: 40px;
         }
 
-        /* --- SECTION: THE ARCHITECT (PC ADJUSTED) --- */
+        /* --- SECTION: THE ARCHITECT (PC: FLUSH TOP/BOTTOM) --- */
         .architect-section {
-            min-height: 85vh; /* COMPACT ON PC (Was 100vh) */
+            /* Height matches image visually */
+            min-height: 85vh; 
             display: flex;
             align-items: center;
             overflow: hidden;
             padding: 0;
+            margin-top: 100px;
         }
 
         .arch-grid {
@@ -227,10 +224,10 @@
         }
 
         .arch-visual {
-            height: 85vh; /* Matches section height on PC */
+            height: 85vh; /* Fixed height for container */
             position: relative;
             display: flex;
-            align-items: flex-end;
+            align-items: flex-end; /* Image sits at bottom */
             justify-content: center;
         }
 
@@ -243,19 +240,22 @@
         }
 
         .arch-content {
-            padding: 40px;
+            /* KEY FIX: Height 85vh to match image, Space-between to push Top/Bottom apart */
+            height: 85vh;
+            padding: 0 40px; /* Horizontal padding only */
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 20px;
+            justify-content: space-between; /* Push Headline Up, Body Down */
         }
 
+        /* Typography Tighter for PC */
         .arch-statement {
-            font-size: clamp(1.5rem, 3vw, 3.5rem);
+            font-size: clamp(1.8rem, 2.5vw, 3rem); /* Slightly tighter */
             font-weight: 900;
-            line-height: 1.1;
+            line-height: 1;
             text-transform: uppercase;
             color: #333;
+            margin-bottom: 10px;
         }
 
         .arch-statement.highlight {
@@ -265,20 +265,20 @@
         .arch-body {
             font-family: var(--font-mono);
             color: var(--text-dim);
-            font-size: 1rem;
-            margin-top: 20px;
-            line-height: 1.6;
+            font-size: 0.9rem; /* Tighter */
+            margin-top: 15px;
+            line-height: 1.5;
             max-width: 500px;
         }
 
         .signature-block {
-            margin-top: 80px;
+            margin-top: 40px;
             border-left: 2px solid var(--accent-red);
-            padding-left: 30px;
+            padding-left: 20px;
         }
 
         .sig-age {
-            font-size: 6rem;
+            font-size: 5rem; /* Tighter */
             font-weight: 900;
             line-height: 0.8;
             color: #fff;
@@ -288,26 +288,33 @@
             font-family: var(--font-mono);
             letter-spacing: 0.2em;
             color: var(--accent-red);
-            font-size: 1.2rem;
-            margin-top: 10px;
+            font-size: 1rem;
+            margin-top: 8px;
         }
 
-        /* MOBILE OVERRIDES - DO NOT TOUCH */
+        /* MOBILE OVERRIDES - KEEP PERFECT */
         @media (max-width: 900px) {
             .architect-section {
-                min-height: auto; /* Reset constraints for mobile */
+                min-height: auto;
+                margin-top: 50px;
             }
             .arch-grid {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto;
             }
             .arch-visual {
-                height: 60vh; /* Keep Mobile Perfect Height */
+                height: 60vh;
                 order: 2;
             }
             .arch-content {
+                height: auto; /* Reset height constraints */
+                justify-content: center;
                 padding: 40px 24px;
                 order: 1;
+                gap: 20px; /* Use gap instead of space-between */
+            }
+            .arch-statement {
+                font-size: 2.5rem;
             }
         }
 
@@ -321,7 +328,7 @@
             font-weight: 900;
             text-transform: uppercase;
             text-decoration: none;
-            border-radius: 0; /* Sharp */
+            border-radius: 0;
             transition: all 0.3s ease;
             border: 2px solid var(--accent-red);
         }
@@ -334,7 +341,6 @@
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         }
 
-        /* --- TYPEWRITER (NO CURSOR) --- */
         .type-el {
             opacity: 0;
         }
@@ -468,21 +474,31 @@
         <!-- THE ARCHITECT -->
         <section class="architect-section">
             <div class="arch-grid">
+                <!-- LEFT: VISUAL -->
                 <div class="arch-visual">
                     <img src="art.png" alt="The Architect" class="arch-img">
                     <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); filter: blur(50px); z-index: -1;"></div>
                 </div>
+                
+                <!-- RIGHT: CONTENT SPLIT TOP/BOTTOM -->
                 <div class="arch-content">
-                    <h2 class="arch-statement type-target" style="color: #444;" data-text="It didn't take a corporation."></h2>
-                    <h2 class="arch-statement type-target" style="color: #888;" data-text="It didn't take a government."></h2>
-                    <h2 class="arch-statement highlight type-target" data-text="It just took one bored kid."></h2>
-                    <div style="margin-top: 40px;">
-                        <p class="arch-body type-target" data-text="While my peers were chasing dopamine in 15-second videos, I was forging digital steel."></p>
-                        <p class="arch-body type-target danger" style="margin-top: 15px;" data-text="Do not underestimate the silence."></p>
+                    <!-- Group 1: TOP -->
+                    <div class="arch-group-top">
+                        <h2 class="arch-statement type-target" style="color: #444;" data-text="It didn't take a corporation."></h2>
+                        <h2 class="arch-statement type-target" style="color: #888;" data-text="It didn't take a government."></h2>
+                        <h2 class="arch-statement highlight type-target" data-text="It just took one bored kid."></h2>
                     </div>
-                    <div class="signature-block">
-                        <div class="sig-age type-target" data-text="14."></div>
-                        <div class="sig-role type-target" data-text="ARCHITECT."></div>
+                    
+                    <!-- Group 2: BOTTOM -->
+                    <div class="arch-group-bottom">
+                        <div style="margin-bottom: 20px;">
+                            <p class="arch-body type-target" data-text="While my peers were chasing dopamine in 15-second videos, I was forging digital steel."></p>
+                            <p class="arch-body type-target danger" style="margin-top: 10px;" data-text="Do not underestimate the silence."></p>
+                        </div>
+                        <div class="signature-block">
+                            <div class="sig-age type-target" data-text="14."></div>
+                            <div class="sig-role type-target" data-text="ARCHITECT."></div>
+                        </div>
                     </div>
                 </div>
             </div>
