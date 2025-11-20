@@ -1,1 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRACELESS // FINAL_PROTOCOL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & CORE --- */
+        :root {
+            --bg-color: #000000;
+            --accent-blue: #050b1e; /* Deep Abyss Blue */
+            --accent-red: #ff1a1a;   /* Signal Red */
+            --text-main: #ffffff;
+            --text-dim: #666666;
+            
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* --- STATUS BADGE (CENTERED IOS PILL) --- */
+        .status-badge {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 500;
+            
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 12px 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .status-blink {
+            color: var(--accent-red);
+            animation: blink-status 2s infinite;
+            font-weight: 700;
+        }
+
+        @keyframes blink-status {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* --- LIVING BACKGROUND --- */
+        .atmosphere {
+            position: fixed; inset: 0; z-index: -1;
+            background: black;
+        }
+        
+        .nebula {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 150vw; height: 150vw;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, var(--accent-blue) 0%, transparent 60%);
+            opacity: 0.6;
+            filter: blur(80px);
+            animation: breathe 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, .phrase {
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        .mono {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+        }
+
+        /* Utility: Red Text */
+        .danger { color: var(--accent-red); }
+
+        /* --- INTRO --- */
+        #intro-layer {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        .intro-content { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        .intro-logo-wrap { width: 150px; height: 150px; z-index: 2; transition: transform 1s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .intro-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+        .intro-text-huge {
+            font-weight: 900; font-size: clamp(4rem, 15vw, 12rem); letter-spacing: -0.05em;
+            position: absolute; bottom: -20vh; opacity: 0; transition: all 1s cubic-bezier(0.1, 0.9, 0.2, 1);
+            color: #fff; text-transform: uppercase;
+        }
+        .intro-active .intro-logo-wrap { transform: translateY(-30vh) scale(0.5); }
+        .intro-active .intro-text-huge { bottom: 40%; opacity: 1; }
+        .intro-split .intro-logo-wrap { transform: translate(-150vw, -30vh) scale(0.5); transition: 0.6s cubic-bezier(0.7,0,0.8,0); }
+        .intro-split .intro-text-huge { transform: translateX(150vw); transition: 0.6s cubic-bezier(0.7,0,0.8,0); }
+        .intro-split { pointer-events: none; background: transparent !important; transition: background 0.1s 0.5s; }
+
+
+        /* --- LAYOUT & SECTIONS --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        .screen-section {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 100px 0;
+        }
+
+        .center-stage {
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- TEXT SIZES --- */
+        .hero-title { font-size: clamp(3rem, 10vw, 8rem); margin-bottom: 20px; }
+        .statement-text { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 40px; display: block; }
+        .detail-text { font-size: clamp(1rem, 2vw, 1.5rem); color: var(--text-dim); max-width: 600px; line-height: 1.5; }
+
+        /* --- MECHANISM GRID --- */
+        .mech-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            width: 100%;
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .mech-step {
+            text-align: left;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 0; 
+            transition: all 0.4s ease;
+        }
+
+        .mech-step:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .mech-step h3 {
+            white-space: normal;
+            font-size: clamp(0.9rem, 1.3vw, 1rem);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            overflow-wrap: break-word;
+        }
+
+        /* --- WARNING ZONE --- */
+        .warning-block {
+            border-left: 4px solid var(--accent-red);
+            padding-left: 40px;
+        }
+
+        /* --- SECTION: THE ARCHITECT (PC: FLUSH TOP/BOTTOM) --- */
+        .architect-section {
+            /* Height matches image visually */
+            min-height: 85vh; 
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 0;
+            margin-top: 100px;
+        }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+            height: 100%;
+        }
+
+        .arch-visual {
+            height: 85vh; /* Fixed height for container */
+            position: relative;
+            display: flex;
+            align-items: flex-end; /* Image sits at bottom */
+            justify-content: center;
+        }
+
+        .arch-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: bottom center;
+            transition: 1s;
+        }
+
+        .arch-content {
+            /* KEY FIX: Height 85vh to match image, Space-between to push Top/Bottom apart */
+            height: 85vh;
+            padding: 0 40px; /* Horizontal padding only */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Push Headline Up, Body Down */
+        }
+
+        /* Typography Tighter for PC */
+        .arch-statement {
+            font-size: clamp(1.8rem, 2.5vw, 3rem); /* Slightly tighter */
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .arch-statement.highlight {
+            color: #fff;
+        }
+
+        .arch-body {
+            font-family: var(--font-mono);
+            color: var(--text-dim);
+            font-size: 0.9rem; /* Tighter */
+            margin-top: 15px;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .signature-block {
+            margin-top: 40px;
+            border-left: 2px solid var(--accent-red);
+            padding-left: 20px;
+        }
+
+        .sig-age {
+            font-size: 5rem; /* Tighter */
+            font-weight: 900;
+            line-height: 0.8;
+            color: #fff;
+        }
+
+        .sig-role {
+            font-family: var(--font-mono);
+            letter-spacing: 0.2em;
+            color: var(--accent-red);
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        /* MOBILE OVERRIDES - KEEP PERFECT */
+        @media (max-width: 900px) {
+            .architect-section {
+                min-height: auto;
+                margin-top: 50px;
+            }
+            .arch-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+            }
+            .arch-visual {
+                height: 60vh;
+                order: 2;
+            }
+            .arch-content {
+                height: auto; /* Reset height constraints */
+                justify-content: center;
+                padding: 40px 24px;
+                order: 1;
+                gap: 20px; /* Use gap instead of space-between */
+            }
+            .arch-statement {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* --- FOOTER BUTTON --- */
+        .btn-red {
+            display: inline-block;
+            background: var(--accent-red);
+            color: #fff;
+            padding: 30px 60px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-red);
+        }
+        
+        .btn-red:hover {
+            background: #ffffff;
+            color: var(--accent-red);
+            border-color: #ffffff;
+            transform: none;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .type-el {
+            opacity: 0;
+        }
+        .type-el.visible {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- STATUS BADGE (CENTERED IOS PILL) -->
+    <div class="status-badge">
+        <span>STATUS: <span class="status-blink">EXPERIMENTAL</span></span>
+    </div>
+
+    <!-- ATMOSPHERE -->
+    <div class="atmosphere">
+        <div class="nebula"></div>
+    </div>
+
+    <!-- INTRO -->
+    <div id="intro-layer">
+        <div class="intro-content">
+            <div class="intro-logo-wrap">
+                <img src="BrandAssets/logo.png" alt="" onerror="this.style.display='none'; this.parentElement.style.background='#fff'">
+            </div>
+            <div class="intro-text-huge">TRACELESS.</div>
+        </div>
+    </div>
+
+    <main>
+        <!-- HERO -->
+        <section class="screen-section center-stage" style="min-height: 100vh;">
+            <div class="container">
+                <h1 class="hero-title type-target" data-text="TRACELESS."></h1>
+                <h2 class="type-target" style="font-weight: 400; color: #888; font-size: 1.5rem;" data-text="Communication Protocol."></h2>
+                <div class="mono type-target" style="margin-top: 80px;" data-text="THE RECORD CANNOT BE BROKEN"></div>
+            </div>
+        </section>
+
+        <!-- MANIFESTO -->
+        <section class="container">
+            <div class="screen-section center-stage">
+                <h2 class="statement-text type-target" data-text="Privacy is a ghost story."></h2>
+            </div>
+            <div class="screen-section center-stage">
+                <h2 class="statement-text type-target" style="color: #999;" data-text="They tell it to you at night,"></h2>
+                <h2 class="statement-text type-target" style="color: #555;" data-text="but it disappears in the light of day."></h2>
+            </div>
+            <div class="screen-section center-stage">
+                <h2 class="statement-text type-target" data-text="Their servers."></h2>
+                <h2 class="statement-text type-target" data-text="Their rules."></h2>
+                <h2 class="statement-text type-target" data-text="Their cage."></h2>
+            </div>
+            <div class="screen-section center-stage">
+                <h2 class="statement-text type-target" style="color: #fff;" data-text="We did not build a better cage."></h2>
+                <h2 class="statement-text type-target" style="font-size: 5rem;" data-text="We built an exit."></h2>
+            </div>
+        </section>
+
+        <!-- MECHANISM -->
+        <section class="screen-section">
+            <div class="container" style="width: 100%;">
+                <div class="mono type-target" style="margin-bottom: 40px;" data-text="// THE MECHANISM"></div>
+                
+                <div class="mech-row">
+                    <div class="mech-step">
+                        <div class="mono type-target" style="color: var(--accent-red); margin-bottom: 10px;" data-text="01 //"></div>
+                        <h3 class="type-target" data-text="[ Message ]"></h3>
+                        <p class="detail-text type-target" style="font-size: 0.9rem; margin-top: 10px;" data-text="Your words."></p>
+                    </div>
+                    <div class="mech-step">
+                        <div class="mono type-target" style="color: var(--accent-red); margin-bottom: 10px;" data-text="02 //"></div>
+                        <h3 class="type-target" data-text="[ Encryption ]"></h3>
+                        <p class="detail-text type-target" style="font-size: 0.9rem; margin-top: 10px;" data-text="On device. Local."></p>
+                    </div>
+                    <div class="mech-step">
+                        <div class="mono type-target" style="color: var(--accent-red); margin-bottom: 10px;" data-text="03 //"></div>
+                        <h3 class="type-target" data-text="[ Transaction ]"></h3>
+                        <p class="detail-text type-target" style="font-size: 0.9rem; margin-top: 10px;" data-text="Sealed on Polygon."></p>
+                    </div>
+                    <div class="mech-step">
+                        <div class="mono type-target" style="color: var(--accent-red); margin-bottom: 10px;" data-text="04 //"></div>
+                        <h3 class="type-target" data-text="[ Blockchain ]"></h3>
+                        <p class="detail-text type-target" style="font-size: 0.9rem; margin-top: 10px;" data-text="Carved forever."></p>
+                    </div>
+                </div>
+                
+                <div class="center-stage" style="margin-top: 100px;">
+                    <div class="mono type-target" style="color: #8247E5;" data-text="BUILT ON POLYGON. NOT FOR HYPE. FOR EFFICIENCY."></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USE CASES -->
+        <section class="screen-section">
+            <div class="container">
+                <h2 class="statement-text type-target" data-text="Not a messenger."></h2>
+                <h2 class="statement-text type-target" data-text="An instrument."></h2>
+                
+                <div style="margin-top: 60px; border-left: 1px solid #333; padding-left: 30px;">
+                    <div style="margin-bottom: 40px;">
+                        <h3 class="type-target" data-text="The Digital Dead Drop"></h3>
+                        <p class="detail-text type-target" data-text="Unstoppable delivery for journalists."></p>
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        <h3 class="type-target" data-text="Proof of Will"></h3>
+                        <p class="detail-text type-target" data-text="Unchallengeable digital inheritance."></p>
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        <h3 class="type-target" data-text="Dispute Resolution"></h3>
+                        <p class="detail-text type-target" data-text="Reveal keys to prove truth."></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WARNING -->
+        <section class="screen-section center-stage">
+            <div class="container warning-block">
+                <h2 class="statement-text danger type-target" data-text="Eternity has consequences."></h2>
+                <div style="margin-top: 40px;">
+                    <p class="statement-text danger type-target" style="font-size: 1.5rem;" data-text="A word, once sent, can never be recalled."></p>
+                    <p class="statement-text danger type-target" style="font-size: 1.5rem;" data-text="Anonymity protects identity, not actions."></p>
+                    <p class="statement-text danger type-target" style="font-size: 1.5rem; font-weight: 900;" data-text="The blockchain never forgets."></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE ARCHITECT -->
+        <section class="architect-section">
+            <div class="arch-grid">
+                <!-- LEFT: VISUAL -->
+                <div class="arch-visual">
+                    <img src="art.png" alt="The Architect" class="arch-img">
+                    <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); filter: blur(50px); z-index: -1;"></div>
+                </div>
+                
+                <!-- RIGHT: CONTENT SPLIT TOP/BOTTOM -->
+                <div class="arch-content">
+                    <!-- Group 1: TOP -->
+                    <div class="arch-group-top">
+                        <h2 class="arch-statement type-target" style="color: #444;" data-text="It didn't take a corporation."></h2>
+                        <h2 class="arch-statement type-target" style="color: #888;" data-text="It didn't take a government."></h2>
+                        <h2 class="arch-statement highlight type-target" data-text="It just took one bored kid."></h2>
+                    </div>
+                    
+                    <!-- Group 2: BOTTOM -->
+                    <div class="arch-group-bottom">
+                        <div style="margin-bottom: 20px;">
+                            <p class="arch-body type-target" data-text="While my peers were chasing dopamine in 15-second videos, I was forging digital steel."></p>
+                            <p class="arch-body type-target danger" style="margin-top: 10px;" data-text="Do not underestimate the silence."></p>
+                        </div>
+                        <div class="signature-block">
+                            <div class="sig-age type-target" data-text="14."></div>
+                            <div class="sig-role type-target" data-text="ARCHITECT."></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <section class="screen-section center-stage" style="padding-bottom: 100px;">
+            <div class="container">
+                <h2 class="hero-title type-target" data-text="The Protocol is Live."></h2>
+                
+                <div style="margin-top: 60px;">
+                    <a href="https://github.com/TracelessDev/traceless-core/releases/tag/v0.0.1-alpha" class="btn-red" target="_blank">Download for Windows</a>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <a href="https://github.com/TracelessDev/traceless-core" class="mono type-target" style="color: #fff; text-decoration: none; border-bottom: 1px solid #fff;" data-text="The code is the contract. Verify on GitHub." target="_blank"></a>
+                </div>
+                
+                <!-- QUOTES -->
+                <div style="margin-top: 120px; border: 2px solid var(--accent-red); padding: 40px; max-width: 600px; margin-inline: auto;">
+                    <p id="quote-target" class="mono type-target" style="color: #fff; font-size: 1rem; line-height: 1.6;" data-text='"Every message is a tattoo on the soul of the universe."'></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const introLayer = document.getElementById('intro-layer');
+            
+            // Intro Sequence
+            setTimeout(() => { introLayer.classList.add('intro-active'); }, 800);
+            setTimeout(() => { 
+                introLayer.classList.add('intro-split'); 
+                setTimeout(initObserver, 500);
+            }, 3500);
+
+            // Typewriter Engine
+            function initObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startTyping(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 }); 
+
+                document.querySelectorAll('.type-target').forEach(el => observer.observe(el));
+            }
+
+            function startTyping(element) {
+                if (element.typingTimer) clearTimeout(element.typingTimer);
+
+                const text = element.getAttribute('data-text');
+                element.textContent = '';
+                element.classList.add('visible'); 
+                
+                let i = 0;
+                const speed = text.length > 40 ? 10 : 25; 
+
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        element.typingTimer = setTimeout(type, speed + (Math.random() * 10));
+                    }
+                }
+                type();
+            }
+
+            // Quote Rotator
+            const quotes = [
+                '"Every message is a tattoo on the soul of the universe."',
+                '"We are not building a service. We are building a digital monument."',
+                '"Traceless is a one-way mirror. You see the message, you don\'t see the ghost."',
+                '"The price of truth is eternity."',
+                '"Anonymity is a shield, not a sword."'
+            ];
+            const quoteEl = document.getElementById('quote-target');
+            let qIndex = 0;
+
+            setInterval(() => {
+                qIndex = (qIndex + 1) % quotes.length;
+                if (quoteEl.typingTimer) clearTimeout(quoteEl.typingTimer);
+                
+                quoteEl.textContent = '';
+                quoteEl.setAttribute('data-text', quotes[qIndex]);
+                startTyping(quoteEl);
+            }, 6000); 
+        });
+    </script>
+</body>
+</html>
