@@ -31,7 +31,7 @@
             font-size: 16px;
         }
 
-        /* --- STATUS BADGE (CENTERED IOS PILL) --- */
+        /* --- STATUS BADGE (CENTERED IOS PILL + CLOSE BTN) --- */
         .status-badge {
             position: fixed;
             top: 20px;
@@ -42,7 +42,7 @@
             background: rgba(15, 15, 15, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 100px;
-            padding: 12px 24px;
+            padding: 10px 20px; /* Slightly adjusted padding */
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             
@@ -51,20 +51,46 @@
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            pointer-events: none;
+            
+            /* Interactivity enabled */
+            pointer-events: auto;
+            cursor: default;
             
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
             white-space: nowrap;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            
+            /* Closing Animation */
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .status-badge.closed {
+            opacity: 0;
+            transform: translate(-50%, -20px); /* Slide up and fade */
+            pointer-events: none;
         }
 
         .status-blink {
             color: var(--accent-red);
             animation: blink-status 2s infinite;
             font-weight: 700;
+        }
+        
+        .status-close {
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.5;
+            transition: 0.2s;
+            line-height: 1;
+            padding: 2px; /* Hit area */
+        }
+        
+        .status-close:hover {
+            opacity: 1;
+            color: #fff;
         }
 
         @keyframes blink-status {
@@ -202,9 +228,8 @@
             padding-left: 40px;
         }
 
-        /* --- SECTION: THE ARCHITECT (PC: FLUSH TOP/BOTTOM) --- */
+        /* --- SECTION: THE ARCHITECT --- */
         .architect-section {
-            /* Height matches image visually */
             min-height: 85vh; 
             display: flex;
             align-items: center;
@@ -224,10 +249,10 @@
         }
 
         .arch-visual {
-            height: 85vh; /* Fixed height for container */
+            height: 85vh; 
             position: relative;
             display: flex;
-            align-items: flex-end; /* Image sits at bottom */
+            align-items: flex-end; 
             justify-content: center;
         }
 
@@ -240,17 +265,15 @@
         }
 
         .arch-content {
-            /* KEY FIX: Height 85vh to match image, Space-between to push Top/Bottom apart */
             height: 85vh;
-            padding: 0 40px; /* Horizontal padding only */
+            padding: 0 40px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Push Headline Up, Body Down */
+            justify-content: space-between; 
         }
 
-        /* Typography Tighter for PC */
         .arch-statement {
-            font-size: clamp(1.8rem, 2.5vw, 3rem); /* Slightly tighter */
+            font-size: clamp(1.8rem, 2.5vw, 3rem); 
             font-weight: 900;
             line-height: 1;
             text-transform: uppercase;
@@ -265,7 +288,7 @@
         .arch-body {
             font-family: var(--font-mono);
             color: var(--text-dim);
-            font-size: 0.9rem; /* Tighter */
+            font-size: 0.9rem; 
             margin-top: 15px;
             line-height: 1.5;
             max-width: 500px;
@@ -278,7 +301,7 @@
         }
 
         .sig-age {
-            font-size: 5rem; /* Tighter */
+            font-size: 5rem; 
             font-weight: 900;
             line-height: 0.8;
             color: #fff;
@@ -292,7 +315,7 @@
             margin-top: 8px;
         }
 
-        /* MOBILE OVERRIDES - KEEP PERFECT */
+        /* MOBILE OVERRIDES */
         @media (max-width: 900px) {
             .architect-section {
                 min-height: auto;
@@ -307,11 +330,11 @@
                 order: 2;
             }
             .arch-content {
-                height: auto; /* Reset height constraints */
+                height: auto; 
                 justify-content: center;
                 padding: 40px 24px;
                 order: 1;
-                gap: 20px; /* Use gap instead of space-between */
+                gap: 20px; 
             }
             .arch-statement {
                 font-size: 2.5rem;
@@ -352,9 +375,10 @@
 </head>
 <body>
 
-    <!-- STATUS BADGE (CENTERED IOS PILL) -->
-    <div class="status-badge">
+    <!-- STATUS BADGE (CENTERED PILL + CLOSE) -->
+    <div id="statusBadge" class="status-badge">
         <span>STATUS: <span class="status-blink">EXPERIMENTAL</span></span>
+        <span class="status-close" onclick="closeBadge()">✕</span>
     </div>
 
     <!-- ATMOSPHERE -->
@@ -526,6 +550,11 @@
     </main>
 
     <script>
+        // Close Badge Function
+        function closeBadge() {
+            document.getElementById('statusBadge').classList.add('closed');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const introLayer = document.getElementById('intro-layer');
             
