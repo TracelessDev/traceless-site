@@ -31,18 +31,21 @@
             font-size: 16px;
         }
 
-        /* --- STATUS BADGE (UPDATED: FRAMED) --- */
+        /* --- STATUS BADGE (iOS 26 CENTERED PILL) --- */
         .status-badge {
             position: fixed;
-            top: 30px;
-            left: 30px;
+            top: 20px; /* Чуть выше для эстетики */
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 500;
-            /* Frame & Fill Logic */
-            background: rgba(10, 10, 10, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 15px 25px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            
+            /* Glassmorphism Pill Style */
+            background: rgba(15, 15, 15, 0.6); /* Более прозрачный для iOS эффекта */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px; /* Полное скругление */
+            padding: 12px 24px;
+            backdrop-filter: blur(20px); /* Сильный блюр */
+            -webkit-backdrop-filter: blur(20px);
             
             /* Typography */
             font-family: var(--font-mono);
@@ -51,10 +54,14 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
             pointer-events: none;
+            
+            /* Layout */
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap; /* В одну строку */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .status-blink {
@@ -200,9 +207,9 @@
             padding-left: 40px;
         }
 
-        /* --- SECTION: THE ARCHITECT (UPDATED) --- */
+        /* --- SECTION: THE ARCHITECT (PC ADJUSTED) --- */
         .architect-section {
-            min-height: 100vh;
+            min-height: 85vh; /* COMPACT ON PC (Was 100vh) */
             display: flex;
             align-items: center;
             overflow: hidden;
@@ -220,7 +227,7 @@
         }
 
         .arch-visual {
-            height: 100vh;
+            height: 85vh; /* Matches section height on PC */
             position: relative;
             display: flex;
             align-items: flex-end;
@@ -232,9 +239,6 @@
             height: 100%;
             object-fit: contain;
             object-position: bottom center;
-            
-            /* REMOVED FILTERS & MASK AS REQUESTED */
-            /* Colors are now raw (colored), No blur at bottom */
             transition: 1s;
         }
 
@@ -288,13 +292,17 @@
             margin-top: 10px;
         }
 
+        /* MOBILE OVERRIDES - DO NOT TOUCH */
         @media (max-width: 900px) {
+            .architect-section {
+                min-height: auto; /* Reset constraints for mobile */
+            }
             .arch-grid {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto;
             }
             .arch-visual {
-                height: 60vh;
+                height: 60vh; /* Keep Mobile Perfect Height */
                 order: 2;
             }
             .arch-content {
@@ -338,10 +346,9 @@
 </head>
 <body>
 
-    <!-- STATUS BADGE (FRAMED) -->
+    <!-- STATUS BADGE (CENTERED IOS PILL) -->
     <div class="status-badge">
         <span>STATUS: <span class="status-blink">EXPERIMENTAL</span></span>
-        <span style="opacity: 0.5"></span>
     </div>
 
     <!-- ATMOSPHERE -->
@@ -458,12 +465,11 @@
             </div>
         </section>
 
-        <!-- THE ARCHITECT (UPDATED) -->
+        <!-- THE ARCHITECT -->
         <section class="architect-section">
             <div class="arch-grid">
                 <div class="arch-visual">
                     <img src="art.png" alt="The Architect" class="arch-img">
-                    <!-- Optional Glow behind the sign -->
                     <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); filter: blur(50px); z-index: -1;"></div>
                 </div>
                 <div class="arch-content">
